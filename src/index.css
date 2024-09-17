@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+}
+.page-width {
+  /* width: 100%;
+  padding: 0rem 0.6rem; */
+  max-width: 1400px;
+  width: 95%;
+  margin: 0 auto;
+}
+.img-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.imgs {
+  max-width: calc(19% - 10px);
+}
+@media all and (max-width: 992px) {
+  .imgs {
+    max-width: calc(33% - 10px);
+  }
+}
+@media all and (max-width: 768px) {
+  .imgs {
+    max-width: calc(33% - 10px);
+  }
+}
