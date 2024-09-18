@@ -48,8 +48,7 @@ const Header = () => {
         </div>
       </div>
       <marquee behavior="" direction="right">
-        وَتُعِزُ مَن تَشَاء وَتُذِلُ مَن تَشَاء
-      </marquee>
+        وَتُعِزُ مَن تَشَاء وَتُذِلُ مَن تَشَاء بدر مرجان پیجن کلب ایریا تھپلہ بدر مرجان وہحال پیارا تہال کنجال ڈوگہ تک      </marquee>
       <div className="bg-[#33363d] mt-2">
         <p className="text-center text-white py-2 text-[1.2rem] font-medium">
           Malik Tahir Banka [+923005451787] || Atif Munir [+923055090307]
