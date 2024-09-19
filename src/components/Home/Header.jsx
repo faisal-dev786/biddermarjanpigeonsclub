@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { Link } from "react-router-dom";
 const Header = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -48,7 +48,9 @@ const Header = () => {
         </div>
       </div>
       <marquee behavior="" direction="right">
-        وَتُعِزُ مَن تَشَاء وَتُذِلُ مَن تَشَاء بدر مرجان پیجن کلب ایریا تھپلہ بدر مرجان وہحال پیارا تہال کنجال ڈوگہ تک      </marquee>
+          وَتُعِزُ مَن تَشَاء وَتُذِلُ مَن تَشَاء بدر مرجان پیجن کلب ایریا تھپلہ
+        بدر مرجان وہحال پیارا تہال کنجال ڈوگہ تک{" "}
+      </marquee>
       <div className="bg-[#33363d] mt-2">
         <p className="text-center text-white py-2 text-[1.2rem] font-medium">
           Malik Tahir Banka [+923005451787] || Atif Munir [+923055090307]
@@ -56,9 +58,12 @@ const Header = () => {
       </div>
       <div className="bg-[#23242c] my-3 flex flex-wrap items-center justify-between">
         <p></p>
-        <p className=" text-white ml-20 py-4 text-[1.3rem] font-semibold">
-          Home
-        </p>
+        <Link to="/">
+          <p className=" text-white ml-20 py-4 text-[1.3rem] font-semibold">
+            Home
+          </p>
+        </Link>
+
         <p className="text-white py-4 text-[1.1rem] font-semibold pr-1">
           {formatDate(currentTime)} <span> {formatTime(currentTime)}</span>
         </p>

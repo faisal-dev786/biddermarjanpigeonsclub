@@ -3,8 +3,8 @@ import { FaRegEdit } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
 import { getAllCompetitions, postCompitionInfo } from "../../../Services/api";
 import moment from "moment";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const NewCompetition = () => {
   // image url
   const imageUrl = import.meta.env.VITE_REACT_APP_IMAGE_URL;
@@ -238,10 +238,7 @@ const NewCompetition = () => {
                             </td>
                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                               <div className="flex items-center">
-                                <p className="tertiary-para">
-                                  {" "}
-                                  {item?.date}
-                                </p>
+                                <p className="tertiary-para"> {item?.date}</p>
                               </div>
                             </td>
 
