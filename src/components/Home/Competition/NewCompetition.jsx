@@ -1,83 +1,125 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
+import { getAllCompetitions, postCompitionInfo } from "../../../Services/api";
+import moment from "moment";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const NewCompetition = () => {
-  const tableData = [
-    {
-      img: "",
-      name: "Adam John",
-      pigeons: "4",
-      date: "27-Jul-23",
-      startTime: "12:10pm",
-      EndTime: "5:00pm",
-    },
-    {
-        img: "",
-        name: "Adam John",
-        pigeons: "4",
-        date: "27-Jul-23",
-        startTime: "12:10pm",
-        EndTime: "5:00pm",
-    },
-  ];
+  // image url
+  const imageUrl = import.meta.env.VITE_REACT_APP_IMAGE_URL;
+  const [getComp, setGetComp] = useState();
+  const [competitionName, setCompetitionName] = useState("");
+  const [name, setName] = useState("");
+  const [date, setDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [pictures, setPictures] = useState(null);
+  const [pegions, setPegions] = useState("");
+  const formData = new FormData();
+  // get compition data
+  const getCompData = async () => {
+    try {
+      const response = await getAllCompetitions();
+      console.log("getCompData", response?.data?.data);
+      setGetComp(response?.data?.data?.Pigeon);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleFileChange = (e) => {
+    if (e.target.files) {
+      setPictures(e.target.files[0]);
+    }
+  };
+  // Append form data fields
+  formData.append("competitionName", competitionName);
+  formData.append("name", name);
+  formData.append("date", date);
+  formData.append("startTime", startTime);
+  formData.append("endTime", endTime);
+  formData.append("pegions", pegions);
+
+  // If you have images, append the file
+  if (pictures) {
+    formData.append("pictures", pictures);
+  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await postCompitionInfo(formData);
+      console.log("postCompitionInfo", response?.data?.data);
+
+      if (response.data.status == "Success") {
+        toast.success("New user added successfully");
+        getCompData();
+      } else {
+        toast.error("Something went wrong");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message);
+    }
+  };
+  useEffect(() => {
+    getCompData();
+  }, []);
   return (
     <>
       <div className="page-width">
-        <form className="my-12" action="">
+        <form onSubmit={handleSubmit} className="my-12" action="">
           <div className="w-6/6 md:w-2/3 mx-auto py-8 rounded-lg border shadow-lg p-5">
             <h1 className="text-center text-[1.3rem] md:text-[3rem] font-semibold">
               Add new competition
             </h1>
-            <p className=" pt-5 pb-4 font-semibold">
-              Competition name
-            </p>
+            <p className=" pt-5 pb-4 font-semibold">Competition name</p>
             <input
               className="p-[15px] w-full bg-[#f8f8f8] border rounded-lg outline-none"
               placeholder="Type here...."
               type="text"
-              
+              onChange={(e) => setCompetitionName(e.target.value)}
             />
             <p className=" pt-5 pb-4 font-semibold">Name</p>
             <input
               className="p-[15px] w-full bg-[#f8f8f8] border rounded-lg outline-none"
               placeholder="Type here...."
               type="text"
-              
+              onChange={(e) => setName(e.target.value)}
             />
             <p className=" pt-5 pb-4 font-semibold">Pigeons</p>
             <input
               className="p-[15px] w-full bg-[#f8f8f8] border rounded-lg outline-none"
               placeholder="Type here...."
-              type="number"
-              
+              type="text"
+              onChange={(e) => setPegions(e.target.value)}
             />
             <p className=" pt-5 pb-4 font-semibold">Date</p>
             <input
               className="p-[15px] w-full bg-[#f8f8f8] border rounded-lg outline-none"
               placeholder="Type here...."
               type="date"
-              
+              onChange={(e) => setDate(e.target.value)}
             />
             <p className=" pt-5 pb-4 font-semibold">Start time</p>
             <input
               className="p-[15px] w-full bg-[#f8f8f8] border rounded-lg outline-none"
               placeholder="Type here...."
               type="time"
-              
+              onChange={(e) => setStartTime(e.target.value)}
             />
             <p className=" pt-5 pb-4 font-semibold">End time</p>
             <input
               className="p-[15px] w-full bg-[#f8f8f8] border rounded-lg outline-none"
               placeholder="Type here...."
               type="time"
-              
+              onChange={(e) => setEndTime(e.target.value)}
             />
             <p className=" pt-5 pb-4 font-semibold">Upload picture</p>
             <input
               className="p-[15px] w-full bg-[#f8f8f8] border rounded-lg outline-none"
               placeholder="Type here...."
               type="file"
-              
+              onChange={handleFileChange}
             />
             <div className="flex justify-center gap-1 mt-10">
               <button className="px-8 pt-3 pb-2 text-white rounded-md bg-[#67696b]  hover:bg-[#6e6f7179] focus:outline-none">
@@ -86,6 +128,7 @@ const NewCompetition = () => {
             </div>
           </div>
         </form>
+        <ToastContainer />
 
         {/* table data */}
 
@@ -160,7 +203,7 @@ const NewCompetition = () => {
                     {/* HEAD end */}
                     {/* BODY start */}
                     <tbody className="bg-white">
-                      {tableData?.map((item, index) => {
+                      {getComp?.map((item, index) => {
                         return (
                           <tr key={index}>
                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
@@ -172,7 +215,11 @@ const NewCompetition = () => {
                               <div className="flex items-center">
                                 <img
                                   className="max-w-[50px] rounded-xl"
-                                  src="/Malik-Imran.jpg"
+                                  src={
+                                    item?.pictures
+                                      ? item?.pictures
+                                      : "/avatar.png"
+                                  }
                                   alt=""
                                 />
                               </div>
@@ -184,12 +231,17 @@ const NewCompetition = () => {
                             </td>
                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                               <div className="flex items-center">
-                                <p className="tertiary-para">{item?.pigeons}</p>
+                                <p className="tertiary-para">
+                                  {item?.pegions.length}
+                                </p>
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                               <div className="flex items-center">
-                                <p className="tertiary-para">{item?.date}</p>
+                                <p className="tertiary-para">
+                                  {" "}
+                                  {item?.date}
+                                </p>
                               </div>
                             </td>
 
@@ -202,7 +254,7 @@ const NewCompetition = () => {
                             </td>
                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                               <div className="flex items-center">
-                                <p className="tertiary-para">{item?.EndTime}</p>
+                                <p className="tertiary-para">{item?.endTime}</p>
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
@@ -210,10 +262,12 @@ const NewCompetition = () => {
                             </td>
                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                               <div className="flex items-center gap-3">
-                              
-                              <span className="text-[#7777cb] text-[1.2rem] cursor-pointer"><FaRegEdit /></span>
-                              <span className="text-red-500 text-[1.3rem] cursor-pointer"><MdOutlineDelete /></span>
-                              
+                                <span className="text-[#7777cb] text-[1.2rem] cursor-pointer">
+                                  <FaRegEdit />
+                                </span>
+                                <span className="text-red-500 text-[1.3rem] cursor-pointer">
+                                  <MdOutlineDelete />
+                                </span>
                               </div>
                             </td>
                           </tr>
